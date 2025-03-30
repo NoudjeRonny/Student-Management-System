@@ -1,0 +1,22 @@
+<%- include('../layout/header') %>
+<div class="container mt-4">
+    <h1>Profile</h1>
+    <p><strong>Name:</strong> <%= user.name %></p>
+    <p><strong>Email:</strong> <%= user.email %></p>
+    <h3>Enrolled Courses</h3>
+    <ul>
+        <% if (student && student.courses && student.courses.length > 0) { %>
+            <ul>
+                <% student.courses.forEach(course => { %>
+                    <li><%= course.title %> - <%= course.description %></li>
+                <% }) %>
+            </ul>
+        <% } else { %>
+            <p>No enrolled courses yet.</p>
+        <% } %>
+    </ul>
+</div>
+<h3>Enrolled Courses</h3>
+
+
+

@@ -1,0 +1,188 @@
+/* Google Font Import */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+/* Global Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    background-color: #f8f9fa;  /* Light background for the dashboard */
+    color: #333;
+    text-align: center;
+    padding: 20px;
+}
+
+/* Centered container (for forms) */
+.container {
+    max-width: 500px;
+    margin: auto;
+    background: #fff;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Headings */
+h1 {
+    font-size: 28px;
+    font-weight: 600;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;  /* Space between logo and text */
+}
+
+/* Logo inside heading */
+h1 img {
+    width: 50px;
+    height: auto;
+}
+
+/* Buttons */
+.btn {
+    display: inline-block;
+    width: 100%;
+    padding: 12px;
+    margin-top: 10px;
+    background: #007bff;
+    color: white;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: 0.3s;
+}
+
+.btn:hover {
+    background: #0056b3;
+}
+
+/* Forms */
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+input, textarea {
+    width: 100%;
+    padding: 12px;
+    margin: 8px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+/* Buttons inside forms */
+button {
+    padding: 12px;
+    background: #28a745;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: 0.3s;
+}
+
+button:hover {
+    background: #218838;
+}
+
+/* Links */
+a {
+    text-decoration: none;
+    color: #007bff;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* Sidebar */
+.sidebar {
+    width: 250px;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background: #343a40;  /* Dark background for sidebar */
+    padding-top: 20px;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.5); /* Shadow effect */
+
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+}
+
+.nav-link {
+    display: flex;
+    align-items: center;
+    padding: 10px 20px;
+    font-size: 18px;
+    color: #fff;
+    transition: 0.3s;
+}
+
+.nav-link i {
+    margin-right: 10px;  /* Space between icon and text */
+    font-size: 20px;  /* Icon size */
+}
+
+/* Hover effect for sidebar links */
+.nav-link:hover {
+    background-color: #495057;  /* Slight darkening of the background */
+    border-radius: 5px;
+}
+
+/* Success/Error messages */
+#success-message, #error-message {
+    display: block;
+    margin-top: 20px;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: #d4edda;
+    color: #155724;
+    font-size: 16px;
+}
+
+#error-message {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+/* Responsive design for small screens */
+@media (max-width: 600px) {
+    h1 {
+        font-size: 22px;
+        flex-direction: column;  /* Stack logo & text on small screens */
+    }
+
+    h1 img {
+        width: 40px;
+    }
+
+    .sidebar {
+        width: 100%;
+        height: auto;
+        position: static;
+    }
+
+    .nav-link {
+        font-size: 16px;
+        padding: 8px 10px;
+    }
+}
+
+/* Style the icons in the sidebar */
+.sidebar .nav-link i {
+    margin-right: 10px;  /* Space between icon and text */
+    font-size: 18px;     /* Adjust icon size */
+}

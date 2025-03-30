@@ -1,0 +1,55 @@
+<%- include('../layout/adminUpdate') %>
+     
+<h2>Dashboard</h2>
+<div class="main">
+    <div class="cards">
+        <div class="card">
+            <div class="card-content">
+                <div class="number"><%=totalStudents  %></div>
+                <div class="card-name"> Total Students</div>
+            </div>
+             <div class="icon-box">
+                <i class="fas fa-user-graduate"></i>
+             </div>
+        </div>
+        <div class="card">
+            <div class="card-content">
+                <div class="number">7</div>
+                <div class="card-name">Total Enrollment</div>
+            </div>
+             <div class="icon-box">
+                <i class="fas fa-chalkboard-teacher"></i>
+             </div>
+        </div>
+        <div class="card">
+            <div class="card-content">
+                <div class="number"><%= totalAdmins  %></div>
+                <div class="card-name">Total Admin</div>
+            </div>
+             <div class="icon-box">
+                <i class="fas fa-users"></i>
+             </div>
+        </div>
+        <div class="card">
+            <div class="card-content">
+                <div class="number"><%= totalCourses %></div>
+                <div class="card-name">Total Courses</div>
+            </div>
+             <div class="icon-box">
+                <i class="fas fa-book"></i>
+             </div>
+        </div>
+    </div>
+    <div class="charts">
+        <div class="chart">
+            <h2>Performance (past 12 months)</h2>
+            <canvas id="lineChart"></canvas>
+        </div>
+        <div class="chart" id="doughnut-chart">
+            <h2>Users </h2>
+            <canvas id="doughnut"></canvas>
+        </div>
+    </div>
+</div>
+</div>
+<%- include('../layout/footerUpdate.ejs') %>  

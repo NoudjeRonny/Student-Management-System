@@ -1,0 +1,92 @@
+<% if (typeof messages !== 'undefined' && messages.length > 0) { %>
+    <div class="alert alert-info">
+        <% messages.forEach(message => { %>
+            <p><%= message %></p>
+        <% }) %>
+    </div>
+<% } %>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="/css/admin-dashboard.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+
+    <!-- Top Horizontal Navbar -->
+    <nav class="navbar navbar-expand-lg  shadow fixed-top">
+        <div class="container-fluid d-flex justify-content-between">
+            <!-- Dashboard Title -->
+            <a class="navbar-brand font-weight-bold" href="#">Admin Dashboard</a>
+            
+            <!-- Right Side of Navbar -->
+            <div class="d-flex align-items-center">
+                <!-- Notification Icon -->
+                <a href="#" class="text-light mr-3 position-relative">
+                    <i class="fas fa-bell fa-lg"></i>
+                    <span class="badge badge-danger position-absolute" style="top: -5px; right: -5px;">2</span>
+                </a>
+
+                <!-- User Profile Dropdown -->
+                <div class="dropdown">
+                    <a href="#" class="text-light dropdown-toggle d-flex align-items-center" id="userDropdown" data-toggle="dropdown">
+                        <img src="/images/<%= admin.profilePicture %>" width="40" height="40" class="rounded-circle border border-white mr-2">
+                        <span><%= admin.name %></span>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right">
+                        <a class="dropdown-item" href="/admin/update-profile"><i class="fas fa-user-edit"></i> Update Profile</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item text-danger" href="/admin/logout" onclick="return confirm('Are you sure you want to logout?');">
+                            <i class="fas fa-sign-out-alt"></i> Logout
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <ul class="nav flex-column">
+            <li class="nav-item">
+                <a href="/admin/dashboard" class="nav-link text-light">
+                    <i class="fas fa-tachometer-alt"></i> Dashboard
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-light" href="/admin/manage-students">
+                    <i class="fas fa-user-graduate"></i> Manage Students
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-light" href="/admin/manage-courses">
+                    <i class="fas fa-book"></i> Manage Courses
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-light" href="/admin/Attendance">
+                    <i class="fas fa-calendar-check"></i>Attendance
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-light" href="/admin/manage-users">
+                    <i class="fas fa-users"></i> Manage Users
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link t" href="/admin/report" >
+                    <i class="fas fa-sign-out-alt"></i> Report
+                </a>
+            </li>
+        </ul>
+    </div>
+    <!-- Bootstrap JS -->
+
+</body>
+</html>

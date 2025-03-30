@@ -1,0 +1,102 @@
+
+<% if (typeof messages !== 'undefined' && messages.length > 0) { %>
+    <div class="alert alert-info">
+        <% messages.forEach(message => { %>
+            <p><%= message %></p>
+        <% }) %>
+    </div>
+<% } %>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link  rel="stylesheet" href="/css/adminUpdate.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <title>ADMIN</title>
+</head>
+<body>
+    <div class="container">
+        <div class="topbar">
+            <div class="logo">
+                <h2>StudManager</h2>
+            </div>
+            <div class="search">
+                <input type="text" id="searchInput" placeholder="Search here..." onkeyup="filterStudents()">
+                <label for="search" ><i class="fas fa-search"></i></label>
+            </div>
+            <i class="fas fa-bell"></i>
+            <!-- drop down menu -->
+            <div class="user">
+                <span class="name1" onclick="toggleDropdown(event)"> 
+                    <%= admin.name %> 
+                    <i class="fas fa-caret-down" id="caret"></i> <!-- Add the caret icon here -->
+                </span>
+                <img src="/images/<%= admin.profilePicture %>" alt="Profile Picture">
+                <div class="dropdown">
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="/admin/view-profile"><i class="fas fa-eye"></i> View  Profile</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item text-danger" href="/admin/logout" onclick="return confirm('Are you sure you want to logout?');">
+                            <i class="fas fa-sign-out-alt"></i> Logout
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- end of drop down menu -->
+        </div>
+        <div class="sidebar">
+            <ul>
+                <li>
+                    <a href="/admin/dashboard">
+                        <i class="fas fa-th-large"></i>
+                        <div>Dashboaard</div>
+                    </a>
+                </li>
+                <li>
+                    <a href="/admin/manage-students">
+                        <i class="fas fa-user-graduate"></i>
+                        <div>Students</div>
+                    </a>
+                </li>
+                <li>
+                    <a href="admin/manage-teachers">
+                        <i class="fas fa-chalkboard-teacher"></i>
+                        <div>Marks</div>
+                    </a>
+                </li>
+                <li>
+                    <a href="/admin/manage-users">
+                        <i class="fas fa-users"></i>
+                        <div>Admin</div>
+                    </a>
+                </li>
+                <li>
+                    <a href="/admin/manage-courses">
+                        <i class="fas fa-book"></i>
+                        <div>Courses</div>
+                    </a>
+                </li>
+                <li>
+                    <a href="/admin/Attendance">
+                        <i class="fas fa-calendar-check"></i>
+                        <div>Attendance</div>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <i class="fas fa-comment "></i>
+                        <div>Communications</div>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <i class="fas fa-question"></i>
+                        <div>Help</div>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    

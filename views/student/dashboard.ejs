@@ -1,0 +1,41 @@
+<%- include('../layout/header') %>
+
+<div class="container mt-4">
+    <!-- Flash Messages -->
+    <% if (messages && messages.success && messages.success.length > 0) { %>
+        <div class="alert alert-success" id="success-message">
+            <% messages.success.forEach(msg => { %>
+                <p><%= msg %></p>
+            <% }) %>
+        </div>
+    <% } %>
+
+    <% if (messages && messages.error && messages.error.length > 0) { %>
+        <div class="alert alert-danger" id="error-message">
+            <% messages.error.forEach(msg => { %>
+                <p><%= msg %></p>
+            <% }) %>
+        </div>
+    <% } %>
+
+    <h1>Welcome, <%= user.name %>!</h1>
+    <p>Email: <%= user.email %></p>
+    <img src="/images/students/<%= user.image %>" width="40" height="40" class="rounded-circle border border-white mr-2">
+
+    <h3>Enrolled Courses</h3>
+    <% if (user.courses && user.courses.length > 0) { %>
+        <ul class="list-group">
+            <% user.courses.forEach(course => { %>
+                <li class="list-group-item"><strong><%= course.title %></strong> - <%= course.description %></li>
+            <% }) %>
+        </ul>
+    <% } else { %>
+        <p class="text-muted">No enrolled courses yet.</p>
+    <% } %>
+
+</div>
+
+<%- include('../layout/footer') %>
+
+<!-- JavaScript to make the message disappear after a few seconds -->
+
