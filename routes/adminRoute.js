@@ -7,7 +7,7 @@ const crypto = require('crypto');
 const nodemailer = require('nodemailer');
 const path = require('path');
 const User = require('../models/User');
-const Course = require('../models/Course');
+const Course = require('../models/course');
 const router = express.Router();
 
 // nodemailer credential
