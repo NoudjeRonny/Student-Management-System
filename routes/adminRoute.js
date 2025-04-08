@@ -10,6 +10,19 @@ const User = require('../models/User');
 const Course = require('../models/Course');
 const router = express.Router();
 
+// nodemailer credential
+// Looking to send emails in production? Check out our Email API/SMTP product!
+var transport = nodemailer.createTransport({
+    host: "sandbox.smtp.mailtrap.io",
+    port: 2525,
+    auth: {
+      user: "061f7115930e35",
+      pass: "f6457e4ec8b4f6"
+    }
+  });
+
+
+
 // Middleware to protect admin routes
 function isAdminAuthenticated(req, res, next) {
     if (!req.session.userId) {
@@ -71,7 +84,10 @@ router.post('/admin/register', upload.single('profilePicture'), async (req, res)
 
 // Admin Login Route
 router.get('/admin/login', (req, res) => {
-    res.render('admin/login', { messages: req.flash('error') });
+    res.render('admin/login', {
+        errorMessages: req.flash('error'),    // Store error messages
+        successMessages: req.flash('success')  // Store success messages
+     });
 });
 
 // Admin Login POST Route (Manual Authentication)
@@ -153,11 +169,16 @@ router.get('/admin/logout', isAdminAuthenticated, (req, res) => {
     });
 });
 
-// Forgot Password Routes
+// Handle Forgot Password Routes
 router.get('/admin/forgot-password', (req, res) => {
-    res.render('admin/forgot-password');
+    res.render('admin/forgot-password', {
+        errorMessages: req.flash('error'),    // Store error messages
+        successMessages: req.flash('success')  // Store success messages
+    });
 });
 
+// hanle forget password post route
+// Handle forgot password post route
 router.post('/admin/forgot-password', async (req, res) => {
     const { email } = req.body;
 
@@ -168,42 +189,25 @@ router.post('/admin/forgot-password', async (req, res) => {
             return res.redirect('/admin/forgot-password');
         }
 
-        const resetToken = crypto.randomBytes(20).toString('hex');
-        const resetTokenExpiration = Date.now() + 3600000;
-
-        admin.resetPasswordToken = resetToken;
-        admin.resetPasswordExpires = resetTokenExpiration;
+        const resetToken = Math.random().toString(36).slice(2);
+        admin.resetToken = resetToken;
         await admin.save();
 
-        const transporter = nodemailer.createTransport({
-            service: 'gmail',
-            auth: {
-                user: 'noudjemambe@gmail.com',
-                pass: '12345678910237',
-            },
+        const info = await transport.sendMail({
+            from: '"MailBoxes 👻" <noudjemambe@gmail.com>', // sender address
+            to: email, // list of receivers
+            subject: "Password Reset", // Subject line
+            html: `<p>Click this link to reset your password:
+                   <a href="http://localhost:3000/admin/reset-password/${resetToken}">
+                   Reset Password</a><br>Thank you!</p>`, // html body
         });
 
-        const resetUrl = `http://localhost:3000/admin/reset-password/${resetToken}`;
-
-        const mailOptions = {
-            to: email,
-            from: 'noudjemambe@gmail.com',
-            subject: 'Password Reset Request',
-            text: `You are receiving this email because we received a password reset request for your account.\n\n
-                   Please click on the following link, or paste it into your browser, to complete the process:\n\n
-                   ${resetUrl}\n\n
-                   If you did not request this, please ignore this email.\n`,
-        };
-
-        transporter.sendMail(mailOptions, (err, info) => {
-            if (err) {
-                console.error('Error sending email:', err);
-                req.flash('error', 'There was an error sending the password reset email.');
-                return res.redirect('/admin/forgot-password');
-            }
-            req.flash('success', 'Password reset email sent!');
-            res.redirect('/admin/login');
-        });
+        if (info && info.messageId) {
+            req.flash('success', 'Password reset link has been sent to your email.');
+        } else {
+            req.flash('error', 'Error sending email.');
+        }
+        res.redirect('/admin/forgot-password');
 
     } catch (error) {
         console.error('Error during password reset request:', error);
@@ -211,23 +215,20 @@ router.post('/admin/forgot-password', async (req, res) => {
         res.redirect('/admin/forgot-password');
     }
 });
-
 // Reset Password Routes
-router.get('/admin/reset-password/:token', async (req, res) => {
-    const { token } = req.params;
+router.get('/admin/reset-password/:resetToken', async (req, res) => {
+    const { resetToken } = req.params;
 
     try {
-        const admin = await Admin.findOne({
-            resetPasswordToken: token,
-            resetPasswordExpires: { $gt: Date.now() },
-        });
+        const admin = await Admin.findOne({ resetToken });
 
         if (!admin) {
             req.flash('error', 'Password reset token is invalid or has expired.');
             return res.redirect('/admin/forgot-password');
         }
 
-        res.render('admin/reset-password', { token });
+        // Pass messages to the template
+        res.render('admin/reset-password', { resetToken, messages: req.flash('error') });
     } catch (error) {
         console.error('Error during password reset:', error);
         req.flash('error', 'An error occurred. Please try again later.');
@@ -235,39 +236,85 @@ router.get('/admin/reset-password/:token', async (req, res) => {
     }
 });
 
-router.post('/admin/reset-password/:token', async (req, res) => {
-    const { token } = req.params;
-    const { password, confirmPassword } = req.body;
-
+// handling admin reset password
+router.post('/admin/reset-password', async (req, res) => {
+    
+    const {resetToken, new_password, confirmPassword } = req.body;
+    console.log(new_password,confirmPassword,resetToken);
     try {
-        const admin = await Admin.findOne({
-            resetPasswordToken: token,
-            resetPasswordExpires: { $gt: Date.now() },
-        });
+    //     
+    const admin = await Admin.findOne({resetToken});
+            if(new_password != confirmPassword){
+                req.flash('error','password do not match');
+                return redirect(`/admin/reset-password/${resetToken}`);
+            }
 
-        if (!admin) {
-            req.flash('error', 'Password reset token is invalid or has expired.');
-            return res.redirect('/admin/forgot-password');
-        }
+             if(!admin){
+                req.flash('error','Invalid token!');
+                return redirect(`/admin/forget-password`);
+            }
 
-        if (password !== confirmPassword) {
-            req.flash('error', 'Passwords do not match.');
-            return res.redirect(`/admin/reset-password/${token}`);
-        }
+            admin.password = await bcrypt.hash(new_password,10);
+            admin.resetToken = null;
+             await admin.save();
+             req.flash('success','password reset successful');
+             res.redirect('/admin/login');
 
-        const hashedPassword = await bcrypt.hash(password, 10);
-        admin.password = hashedPassword;
-        admin.resetPasswordToken = undefined;
-        admin.resetPasswordExpires = undefined;
-        await admin.save();
-
-        req.flash('success', 'Your password has been reset successfully. Please log in.');
-        res.redirect('/admin/login');
+    
     } catch (error) {
         console.error('Error during password reset:', error);
         req.flash('error', 'An error occurred. Please try again later.');
-        res.redirect(`/admin/reset-password/${token}`);
+        res.redirect(`/admin/reset-password/${resetToken}`);
     }
 });
+
+////////////////// handling student section
+router.get('/admin/addStudent',isAdminAuthenticated,async(req,res)=>{
+    const admin = await Admin.findById(req.session.userId);
+    res.render('admin/addStudent',{title:'Add Student', admin,
+    errorMessages: req.flash('error'), 
+    });
+})
+// admin register student
+
+router.post('/admin/SRegister',upload.single('image'), async (req, res) => {
+    const { name, email, password } = req.body;
+
+    if (!name || !email || !password) {
+        req.flash('error', 'All fields are required');
+        return res.redirect('/admin/addStudent');
+    }
+
+    try {
+        // Check if user already exists
+        const existingUser = await User.findOne({ email });
+
+        if (existingUser) {
+            req.flash('error', 'Email is already registered');
+            return res.redirect('/admin/addStudent');
+        }
+
+        // Hash password and create user
+        const hashedPassword = await bcrypt.hash(password, 10);
+        const user = new User({
+             name,
+              email,
+               password: hashedPassword,
+               image: req.file ? req.file.filename : null,
+                role: 'student' 
+            });
+        await user.save();
+
+        // req.flash('success', 'Registration successful! Please log in.');
+        res.redirect('/admin/dashboard');
+    } catch (error) {
+        console.error('Error registering user:', error);
+        req.flash('error', 'Server error. Please try again.');
+        res.redirect('/admin/addStudent');
+    }
+});
+
+
+
 
 module.exports = router;

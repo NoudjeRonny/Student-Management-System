@@ -1,0 +1,86 @@
+
+ <%- include('../layout/adminUpdate') %>
+ <style>
+    h1{
+        margin-bottom: 20px;
+        text-align: center;
+    }
+    .registration-container {
+        max-width: 400px; /* Max width for the form */
+        padding: 20px; /* Padding inside the form */
+        background-color: #fff; /* White background for the form */
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Box shadow */
+        border-radius: 8px; /* Rounded corners */
+        margin: 50px auto; /* Centering the form */
+        color: #333; /* Text color */
+    }
+    .form-control {
+        background-color: #f5f5f5; /* Light grey for input fields */
+        color: #333; /* Dark text color in input fields */
+        padding: 20px 20px;
+        width: 100%;
+        border: none;
+        outline: none;
+        border-radius: 10px;
+
+    }
+    .form-control::placeholder {
+        color: #888; /* Grey color for placeholders */
+    }
+    .btn-primary {
+        background-color: #007BFF; /* Blue for the button */
+        border-color: #007BFF; /* Matching border color */
+    }
+    .text-center a {
+        color: #007BFF; /* Blue color for links */
+    }
+    .mb-3{ 
+        margin-bottom: 10px;
+        /* border: 2px solid black; */
+    }
+    .btn{
+        background-color: #007BFF;
+        width: 100%;
+        border: none;
+        outline: none;
+        padding:20px 5px;
+        border-radius: 5px;
+        font-size: 22px;
+
+    }
+</style>
+</head>
+<body>
+<div class="main">
+    <div class="registration-container">
+        <h1 class="text-center">Student Registration</h1>
+ <!-- Display error messages -->
+ <% if (errorMessages && errorMessages.length > 0) { %>
+    <div class="alert alert-danger">
+        <% errorMessages.forEach(message => { %>
+            <p><%= message %></p>
+        <% }) %>
+    </div>
+<% } %>
+
+        <form action="/admin/SRegister" method="POST" enctype="multipart/form-data">
+            <div class="mb-3">
+                <input type="text" name="name" placeholder="Name" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <input type="email" name="email" placeholder="Email" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <input type="password" name="password" placeholder="Password" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label for="image" class="form-label">Profile Picture</label>
+                <input type="file" name="image" id="image" class="form-control" required>
+            </div>
+            <button type="submit" class="btn btn-primary w-100">Register</button>
+        </form>
+    </div>
+</div>
+</body>
+
+ <%- include('../layout/footerUpdate.ejs') %>  

@@ -35,8 +35,8 @@ router.get("/", (req, res) => {
 
 // Show Login Page
 router.get("/login", (req, res) => {
-    const messages = req.flash('error'); // Pass flash messages
-    res.render('student/login', { messages });
+    // Pass flash messages
+    res.render('student/login', {  messages: req.flash() });
 });
 
 // Show Registration Page

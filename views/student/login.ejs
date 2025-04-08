@@ -12,16 +12,28 @@
     <div class="container mt-5">
         <div class="card p-4 shadow-lg">
             <h2 class="text-center mb-4">Login</h2>
-
-            <% if (messages && messages.length > 0) { %>
-                <div class="alert alert-danger">
-                    <% messages.forEach(message => { %>
-                        <p><%= message %></p>
-                    <% }) %>
-                </div>
-            <% } %>
-
+   <div class="mb-5">
+          <!-- Flash Messages -->
+          <% if (messages && messages.success && messages.success.length > 0) { %>
+            <div class="alert alert-success" id="success-message">
+                <% messages.success.forEach(msg => { %>
+                    <p><%= msg %></p>
+                <% }) %>
+            </div>
+        <% } %>
+    
+        <% if (messages && messages.error && messages.error.length > 0) { %>
+            <div class="alert alert-danger" id="error-message">
+                <% messages.error.forEach(msg => { %>
+                    <p><%= msg %></p>
+                <% }) %>
+            </div>
+        <% } %>
+    
+   </div>
+   
             <form action="/login" method="POST">
+
                 <div class="mb-3">
                     <input type="email" name="email" placeholder="Email" class="form-control" required>
                 </div>

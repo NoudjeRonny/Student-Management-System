@@ -7,8 +7,7 @@ const adminSchema = new mongoose.Schema({
   role: { type: String, enum: ['super-admin', 'admin'], default: 'admin', required: true },
   profilePicture: { type: String }, // Admin profile picture
   createdAt: { type: Date, default: Date.now },
-  updatedAt: { type: Date },
-  resetPasswordToken: String,
+  resetToken: String,
   resetPasswordExpires: Date
 });
 
