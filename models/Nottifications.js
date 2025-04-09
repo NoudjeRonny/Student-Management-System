@@ -1,7 +1,7 @@
 const NotificationSchema = new mongoose.Schema({
     user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
     message: { type: String, required: true },
-    date: { type: Date, default: Date.now },
+    date: { type: Date, default: new Date() },
     isRead: { type: Boolean, default: false }
 });
 

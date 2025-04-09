@@ -31,8 +31,8 @@ function isAdminAuthenticated(req, res, next) {
     next();
 }
 
-// Set up file upload storage
-const storage = multer.diskStorage({
+// Set up file upload storage for admin
+const adminStorage = multer.diskStorage({
     destination: function (req, file, cb) {
         cb(null, 'public/images/');
     },
@@ -40,7 +40,19 @@ const storage = multer.diskStorage({
         cb(null, Date.now() + path.extname(file.originalname));
     }
 });
-const upload = multer({ storage: storage });
+// set up storage for student
+const studentStorage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, 'public/images/students');
+    },
+    filename: function (req, file, cb) {
+        cb(null, Date.now() + path.extname(file.originalname));
+    }
+});
+// create upload instances from both
+
+const uploadStudent = multer({ storage: studentStorage });
+const uploadAdmin = multer({ storage: adminStorage });
 
 // Admin Registration Route
 router.get('/admin/register', (req, res) => {
@@ -48,7 +60,7 @@ router.get('/admin/register', (req, res) => {
 });
 
 // Admin Registration POST Route
-router.post('/admin/register', upload.single('profilePicture'), async (req, res) => {
+router.post('/admin/register', uploadAdmin.single('profilePicture'), async (req, res) => {
     const { name, email, password } = req.body;
 
     try {
@@ -277,7 +289,7 @@ router.get('/admin/addStudent',isAdminAuthenticated,async(req,res)=>{
 })
 // admin register student
 
-router.post('/admin/SRegister',upload.single('image'), async (req, res) => {
+router.post('/admin/SRegister',uploadStudent.single('image'), async (req, res) => {
     const { name, email, password } = req.body;
 
     if (!name || !email || !password) {
@@ -314,7 +326,14 @@ router.post('/admin/SRegister',upload.single('image'), async (req, res) => {
     }
 });
 
-
-
+// view Students Informations
+router.get("/admin/student-info/:id", async (req, res) => {
+    const admin = await Admin.findById(req.session.userId);
+    const student = await User.findById(req.params.id); // Fetch the specific student by ID
+    if (!student) {
+        return res.status(404).send('Student not found');
+    }
+    res.render("admin/studentInfo", { title: 'STUDENT DATA', admin, student });
+});
 
 module.exports = router;

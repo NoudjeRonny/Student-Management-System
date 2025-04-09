@@ -6,9 +6,12 @@ const adminSchema = new mongoose.Schema({
   name: { type: String, required: true },
   role: { type: String, enum: ['super-admin', 'admin'], default: 'admin', required: true },
   profilePicture: { type: String }, // Admin profile picture
-  createdAt: { type: Date, default: Date.now },
+  createdAt: { type: Date, default: new Date() },
   resetToken: String,
-  resetPasswordExpires: Date
+  courses:[{
+    type:mongoose.Schema.Types.ObjectId,
+    ref:'Course',
+}]
 });
 
 module.exports = mongoose.model('Admin', adminSchema);

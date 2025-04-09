@@ -18,7 +18,7 @@ const userSchema = new mongoose.Schema({
         type: String,
         default: 'student'
     },
-    createdAt: { type: Date, default: Date.now },
+    createdAt: { type: Date, default: new Date() },
     token:String,
   image: {
      type: String, 

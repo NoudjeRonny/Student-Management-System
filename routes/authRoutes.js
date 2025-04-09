@@ -7,7 +7,7 @@ const path = require('path');
 
 
 // Set up student file upload storage
-const storage = multer.diskStorage({
+const studentStorage = multer.diskStorage({
     destination: function (req, file, cb) {
         cb(null, 'public/images/students');
     },
@@ -16,7 +16,7 @@ const storage = multer.diskStorage({
     }
 });
 
-const upload = multer({ storage: storage });
+const uploadStudent = multer({ storage: studentStorage });
 // for Student
 
 // Middleware to check if the user is authenticated
@@ -46,7 +46,7 @@ router.get('/register', (req, res) => {
 });
 
 // Handle Registration
-router.post('/register',upload.single('image'), async (req, res) => {
+router.post('/register',uploadStudent.single('image'), async (req, res) => {
     const { name, email, password } = req.body;
 
     if (!name || !email || !password) {

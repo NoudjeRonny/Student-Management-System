@@ -3,9 +3,9 @@ const mongoose = require('mongoose');
 const CourseSchema = new mongoose.Schema({
     name: { type: String, required: true },
     description: { type: String },
-    startDate: { type: Date },
+    startDate: { type: Date,default: new Date(), },
     endDate: { type: Date },
-    teacher: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+    admin: { type: mongoose.Schema.Types.ObjectId, ref: 'Admin' },
     students: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Student' }], // enrolled student
     documents: [{ type: String }], // linl to the course materials
     status: { type: String, enum: ['ongoing', 'completed'], default: 'ongoing' }, //course status
